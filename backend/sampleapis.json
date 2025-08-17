@@ -1,0 +1,490 @@
+{
+  "subjects": {
+    "create_subject": {
+      "method": "POST",
+      "url": "/api/subjects/",
+      "request": {
+        "name": "Mathematics"
+      },
+      "response": {
+        "id": 1,
+        "name": "Mathematics",
+        "created_at": "2025-01-15T10:30:00Z"
+      }
+    },
+    "list_subjects": {
+      "method": "GET",
+      "url": "/api/subjects/",
+      "response": [
+        {
+          "id": 1,
+          "name": "Mathematics",
+          "created_at": "2025-01-15T10:30:00Z"
+        },
+        {
+          "id": 2,
+          "name": "Physics",
+          "created_at": "2025-01-15T10:35:00Z"
+        },
+        {
+          "id": 3,
+          "name": "Chemistry",
+          "created_at": "2025-01-15T10:40:00Z"
+        }
+      ]
+    },
+    "search_subjects": {
+      "method": "GET",
+      "url": "/api/subjects/?search=math",
+      "response": [
+        {
+          "id": 1,
+          "name": "Mathematics",
+          "created_at": "2025-01-15T10:30:00Z"
+        }
+      ]
+    }
+  },
+  "marking_schemes": {
+    "create_marking_scheme": {
+      "method": "POST",
+      "url": "/api/marking-schemes/",
+      "request": {
+        "name": "Standard Math Grading",
+        "subject": 1,
+        "user_id": "user123",
+        "criteria": {
+          "question_types": {
+            "mcq": {
+              "full_marks": "100% for correct answer",
+              "partial_marks": "0% for incorrect"
+            },
+            "short_answer": {
+              "content_accuracy": 60,
+              "presentation": 20,
+              "completeness": 20,
+              "keywords": ["formula", "solution", "method"]
+            },
+            "long_answer": {
+              "content_accuracy": 50,
+              "presentation": 25,
+              "completeness": 25,
+              "keywords": ["explanation", "steps", "conclusion"],
+              "negative_keywords": ["wrong", "incorrect"]
+            }
+          },
+          "grading_scale": {
+            "A": "90-100",
+            "B": "80-89",
+            "C": "70-79",
+            "D": "60-69",
+            "F": "0-59"
+          }
+        }
+      },
+      "response": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "name": "Standard Math Grading",
+        "subject": 1,
+        "subject_name": "Mathematics",
+        "user_id": "user123",
+        "criteria": {
+          "question_types": {
+            "mcq": {
+              "full_marks": "100% for correct answer",
+              "partial_marks": "0% for incorrect"
+            },
+            "short_answer": {
+              "content_accuracy": 60,
+              "presentation": 20,
+              "completeness": 20,
+              "keywords": ["formula", "solution", "method"]
+            }
+          }
+        },
+        "is_active": true,
+        "created_at": "2025-01-15T11:00:00Z"
+      }
+    },
+    "list_marking_schemes": {
+      "method": "GET",
+      "url": "/api/marking-schemes/?user_id=user123&subject_id=1&is_active=true",
+      "response": [
+        {
+          "id": "550e8400-e29b-41d4-a716-446655440000",
+          "name": "Standard Math Grading",
+          "subject": 1,
+          "subject_name": "Mathematics",
+          "user_id": "user123",
+          "criteria": {
+            "question_types": {
+              "short_answer": {
+                "content_accuracy": 60,
+                "presentation": 20,
+                "completeness": 20
+              }
+            }
+          },
+          "is_active": true,
+          "created_at": "2025-01-15T11:00:00Z"
+        }
+      ]
+    },
+    "deactivate_scheme": {
+      "method": "POST",
+      "url": "/api/marking-schemes/550e8400-e29b-41d4-a716-446655440000/deactivate/",
+      "response": {
+        "message": "Marking scheme deactivated"
+      }
+    }
+  },
+  "question_papers": {
+    "create_question_paper": {
+      "method": "POST",
+      "url": "/api/question-papers/",
+      "content_type": "multipart/form-data",
+      "request": {
+        "title": "Math Final Exam 2025",
+        "subject": 1,
+        "marking_scheme": "550e8400-e29b-41d4-a716-446655440000",
+        "uploaded_by": "user123",
+        "paper_file": "[FILE_UPLOAD]"
+      },
+      "response": {
+        "id": "660e8400-e29b-41d4-a716-446655440001",
+        "title": "Math Final Exam 2025",
+        "subject": 1,
+        "subject_name": "Mathematics",
+        "marking_scheme": "550e8400-e29b-41d4-a716-446655440000",
+        "marking_scheme_name": "Standard Math Grading",
+        "uploaded_by": "user123",
+        "paper_file": "/media/papers/math_final_2025.pdf",
+        "extracted_questions": [],
+        "total_marks": 0,
+        "is_processed": false,
+        "created_at": "2025-01-15T12:00:00Z",
+        "questions_count": 0
+      }
+    },
+    "process_paper": {
+      "method": "POST",
+      "url": "/api/question-papers/660e8400-e29b-41d4-a716-446655440001/process-paper/",
+      "response": {
+        "message": "Paper processed successfully",
+        "total_marks": 100,
+        "questions_count": 5
+      }
+    },
+    "get_questions": {
+      "method": "GET",
+      "url": "/api/question-papers/660e8400-e29b-41d4-a716-446655440001/questions/",
+      "response": {
+        "questions": [
+          {
+            "question_number": "1",
+            "question_text": "Solve the quadratic equation: x² - 5x + 6 = 0",
+            "marks": 10,
+            "question_type": "short_answer",
+            "expected_keywords": ["factorization", "x=2", "x=3"]
+          },
+          {
+            "question_number": "2",
+            "question_text": "Find the derivative of f(x) = 3x² + 2x - 1",
+            "marks": 15,
+            "question_type": "short_answer",
+            "expected_keywords": ["derivative", "6x", "2"]
+          },
+          {
+            "question_number": "3",
+            "question_text": "Explain the concept of limits in calculus with examples",
+            "marks": 25,
+            "question_type": "long_answer",
+            "expected_keywords": ["limits", "approach", "examples", "definition"]
+          },
+          {
+            "question_number": "4",
+            "question_text": "What is the value of sin(π/2)?",
+            "marks": 5,
+            "question_type": "short_answer",
+            "expected_keywords": ["1", "sine", "90 degrees"]
+          },
+          {
+            "question_number": "5",
+            "question_text": "Prove that the sum of angles in a triangle is 180°",
+            "marks": 45,
+            "question_type": "long_answer",
+            "expected_keywords": ["proof", "angles", "180", "triangle", "parallel lines"]
+          }
+        ],
+        "total_marks": 100
+      }
+    },
+    "list_question_papers": {
+      "method": "GET",
+      "url": "/api/question-papers/?uploaded_by=user123&is_processed=true",
+      "response": [
+        {
+          "id": "660e8400-e29b-41d4-a716-446655440001",
+          "title": "Math Final Exam 2025",
+          "subject": 1,
+          "subject_name": "Mathematics",
+          "marking_scheme": "550e8400-e29b-41d4-a716-446655440000",
+          "marking_scheme_name": "Standard Math Grading",
+          "uploaded_by": "user123",
+          "paper_file": "/media/papers/math_final_2025.pdf",
+          "extracted_questions": [],
+          "total_marks": 100,
+          "is_processed": true,
+          "created_at": "2025-01-15T12:00:00Z",
+          "questions_count": 5
+        }
+      ]
+    }
+  },
+  "student_submissions": {
+    "create_submission": {
+      "method": "POST",
+      "url": "/api/submissions/",
+      "content_type": "multipart/form-data",
+      "request": {
+        "question_paper": "660e8400-e29b-41d4-a716-446655440001",
+        "student_name": "John Doe",
+        "student_id": "ST001",
+        "answer_file": "[FILE_UPLOAD]"
+      },
+      "response": {
+        "id": "770e8400-e29b-41d4-a716-446655440002",
+        "question_paper": "660e8400-e29b-41d4-a716-446655440001",
+        "question_paper_title": "Math Final Exam 2025",
+        "student_name": "John Doe",
+        "student_id": "ST001",
+        "answer_file": "/media/answers/john_doe_math_final.pdf",
+        "extracted_answers": [],
+        "is_graded": false,
+        "total_marks": 0,
+        "percentage": 0,
+        "detailed_results": {},
+        "submitted_at": "2025-01-15T13:00:00Z",
+        "graded_at": null
+      }
+    },
+    "grade_submission": {
+      "method": "POST",
+      "url": "/api/submissions/770e8400-e29b-41d4-a716-446655440002/grade-submission/",
+      "response": {
+        "message": "Submission graded successfully",
+        "total_marks": 85,
+        "percentage": 85.0,
+        "detailed_results": {
+          "question_results": [
+            {
+              "question_number": "1",
+              "marks_obtained": 9,
+              "marks_possible": 10,
+              "feedback": "Correct solution with minor presentation issues",
+              "keywords_found": ["factorization", "x=2", "x=3"],
+              "keywords_missing": [],
+              "content_accuracy": 90,
+              "presentation": 80,
+              "completeness": 95
+            },
+            {
+              "question_number": "2",
+              "marks_obtained": 13,
+              "marks_possible": 15,
+              "feedback": "Good understanding, missing some steps",
+              "keywords_found": ["derivative", "6x"],
+              "keywords_missing": ["2"],
+              "content_accuracy": 85,
+              "presentation": 90,
+              "completeness": 80
+            },
+            {
+              "question_number": "3",
+              "marks_obtained": 22,
+              "marks_possible": 25,
+              "feedback": "Excellent explanation with good examples",
+              "keywords_found": ["limits", "approach", "examples", "definition"],
+              "keywords_missing": [],
+              "content_accuracy": 92,
+              "presentation": 85,
+              "completeness": 90
+            },
+            {
+              "question_number": "4",
+              "marks_obtained": 5,
+              "marks_possible": 5,
+              "feedback": "Perfect answer",
+              "keywords_found": ["1", "sine"],
+              "keywords_missing": [],
+              "content_accuracy": 100,
+              "presentation": 100,
+              "completeness": 100
+            },
+            {
+              "question_number": "5",
+              "marks_obtained": 36,
+              "marks_possible": 45,
+              "feedback": "Good proof but could be more rigorous",
+              "keywords_found": ["proof", "angles", "180", "triangle"],
+              "keywords_missing": ["parallel lines"],
+              "content_accuracy": 80,
+              "presentation": 85,
+              "completeness": 75
+            }
+          ],
+          "overall_feedback": "Strong performance with good understanding of concepts. Minor improvements needed in presentation and completeness."
+        }
+      }
+    },
+    "get_results": {
+      "method": "GET",
+      "url": "/api/submissions/770e8400-e29b-41d4-a716-446655440002/results/",
+      "response": {
+        "student_name": "John Doe",
+        "student_id": "ST001",
+        "total_marks": 85,
+        "percentage": 85.0,
+        "detailed_results": {
+          "question_results": [
+            {
+              "question_number": "1",
+              "marks_obtained": 9,
+              "marks_possible": 10,
+              "feedback": "Correct solution with minor presentation issues"
+            }
+          ],
+          "overall_feedback": "Strong performance with good understanding of concepts."
+        },
+        "graded_at": "2025-01-15T13:30:00Z"
+      }
+    },
+    "list_submissions": {
+      "method": "GET",
+      "url": "/api/submissions/?question_paper_id=660e8400-e29b-41d4-a716-446655440001&is_graded=true",
+      "response": [
+        {
+          "id": "770e8400-e29b-41d4-a716-446655440002",
+          "question_paper": "660e8400-e29b-41d4-a716-446655440001",
+          "question_paper_title": "Math Final Exam 2025",
+          "student_name": "John Doe",
+          "student_id": "ST001",
+          "answer_file": "/media/answers/john_doe_math_final.pdf",
+          "extracted_answers": [],
+          "is_graded": true,
+          "total_marks": 85,
+          "percentage": 85.0,
+          "detailed_results": {},
+          "submitted_at": "2025-01-15T13:00:00Z",
+          "graded_at": "2025-01-15T13:30:00Z"
+        }
+      ]
+    }
+  },
+  "grading_sessions": {
+    "create_session": {
+      "method": "POST",
+      "url": "/api/grading-sessions/",
+      "request": {
+        "question_paper": "660e8400-e29b-41d4-a716-446655440001",
+        "initiated_by": "user123"
+      },
+      "response": {
+        "id": "880e8400-e29b-41d4-a716-446655440003",
+        "question_paper": "660e8400-e29b-41d4-a716-446655440001",
+        "question_paper_title": "Math Final Exam 2025",
+        "initiated_by": "user123",
+        "status": "pending",
+        "total_submissions": 0,
+        "processed_submissions": 0,
+        "started_at": "2025-01-15T14:00:00Z",
+        "completed_at": null,
+        "progress_percentage": 0
+      }
+    },
+    "start_grading": {
+      "method": "POST",
+      "url": "/api/grading-sessions/880e8400-e29b-41d4-a716-446655440003/start-grading/",
+      "response": {
+        "message": "Grading session started",
+        "total_submissions": 25,
+        "status": "processing"
+      }
+    },
+    "status_check": {
+      "method": "GET",
+      "url": "/api/grading-sessions/880e8400-e29b-41d4-a716-446655440003/status-check/",
+      "response": {
+        "status": "processing",
+        "total_submissions": 25,
+        "processed_submissions": 18,
+        "progress_percentage": 72.0,
+        "started_at": "2025-01-15T14:00:00Z",
+        "completed_at": null
+      }
+    },
+    "completed_session": {
+      "method": "GET",
+      "url": "/api/grading-sessions/880e8400-e29b-41d4-a716-446655440003/status-check/",
+      "response": {
+        "status": "completed",
+        "total_submissions": 25,
+        "processed_submissions": 25,
+        "progress_percentage": 100.0,
+        "started_at": "2025-01-15T14:00:00Z",
+        "completed_at": "2025-01-15T14:45:00Z"
+      }
+    },
+    "list_sessions": {
+      "method": "GET",
+      "url": "/api/grading-sessions/?initiated_by=user123&status=completed",
+      "response": [
+        {
+          "id": "880e8400-e29b-41d4-a716-446655440003",
+          "question_paper": "660e8400-e29b-41d4-a716-446655440001",
+          "question_paper_title": "Math Final Exam 2025",
+          "initiated_by": "user123",
+          "status": "completed",
+          "total_submissions": 25,
+          "processed_submissions": 25,
+          "started_at": "2025-01-15T14:00:00Z",
+          "completed_at": "2025-01-15T14:45:00Z",
+          "progress_percentage": 100.0
+        }
+      ]
+    }
+  },
+  "error_responses": {
+    "validation_error": {
+      "status": 400,
+      "response": {
+        "name": ["This field is required."],
+        "subject": ["This field is required."]
+      }
+    },
+    "not_found": {
+      "status": 404,
+      "response": {
+        "detail": "Not found."
+      }
+    },
+    "already_processed": {
+      "status": 400,
+      "response": {
+        "error": "Paper already processed"
+      }
+    },
+    "not_graded": {
+      "status": 400,
+      "response": {
+        "error": "Submission not graded yet"
+      }
+    },
+    "session_already_started": {
+      "status": 400,
+      "response": {
+        "error": "Session already started or completed"
+      }
+    }
+  }
+}
